@@ -1,0 +1,27 @@
+<header class="py-3">
+  <div class="row flex-nowrap justify-content-center align-items-center">
+    <div class="col-4 text-center">
+      <a href="/" class="text-decoration-none">
+        <h1 class="display-4 font-italic">ReallySite</h1>
+      </a>
+    </div>
+  </div>
+</header>
+<div class="col-8 py-1 mb-2">
+  <nav class="nav d-flex justify-content-between">
+    <a class="p-2 link-secondary" href="/blog/">ブログ</a>
+    <a class="p-2 link-secondary" href="#">お問い合わせ</a>
+    {% if user.is_authenticated %}
+      <div>
+        <a href="/logout/" class="p-2 link-secondary">ログアウト</a>
+        <a href="/mypage/" class="p-2 link-secondary">マイページ</a>
+      </div>
+    {% else %}
+      <div>
+        <a href="/login/" class="p-2 link-secondary">ログイン</a>
+        <a href="/signup/" class="btn btn-outline-info">新規登録</a>
+      </div>
+    {% endif %}
+    <a class="p-2 link-secondary" href="#">価格</a>
+  </nav>
+</div>

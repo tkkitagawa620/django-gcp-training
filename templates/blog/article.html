@@ -1,0 +1,28 @@
+{% extends 'mysite/base.html' %}
+
+{% block content %}
+
+  <main class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="pb-4 font-italic">
+          {{ obj.title }}
+        </h3>
+        <p class="small text-muted text-right">{{ obj.created_at }}
+          by
+          <a href="#">{{ obj.author }}</a>
+        </p>
+        <p>{{ obj.text }}</p>
+
+        <hr class="my-4">
+        {{ text }}
+        {% include "mysite/snippets/comment.html" %}
+
+      </div>
+
+      {% include "mysite/snippets/sidebar.html" %}
+
+    </div>
+  </main>
+
+{% endblock %}
