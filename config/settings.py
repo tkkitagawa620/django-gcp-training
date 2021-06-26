@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import yaml
 from django.contrib import messages
 import os
 from pathlib import Path
@@ -28,6 +29,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+if DEBUG:
+    # 開発環境
+    with open(os.path.join(BASE_DIR, 'secrets', 'secret_dev.yaml')) as file:
+        objs = yaml.safe_load(file)
+        for obj in objs:
+            os.environ[obj] = objs[obj]
+else:
+    # 本番環境
+    pass
 
 # Application definition
 
@@ -126,6 +136,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# --- static 設定項目 ---
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+# --- static 設定項目 ---
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -148,3 +164,10 @@ MESSAGE_TAGS = {
     messages.INFO: 'rounded-0 alert alert-info',
     messages.DEBUG: 'rounded-0 alert alert-secondary',
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
