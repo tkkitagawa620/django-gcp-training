@@ -1,0 +1,5 @@
+# GAEへアプリケーションをデプロイ
+gcloud app deploy --project django-deploy-tutorial-318015
+
+# Cloud SQLへ接続
+./secrets/cloud_sql_proxy -instances=django-deploy-tutorial-318015:us-central1:django-deploy-tutorial-instance=tcp:3306

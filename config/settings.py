@@ -25,19 +25,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-aramji!+e^4ydf-&l0v!f=@38()y-m9+yh9wb!@mzk)7jf$4i4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
-if DEBUG:
+DEBUG = False
+if os.getenv('GAE_APPLICATION', None):
+    # GAE 本番環境
+    pass
+    # ALLOWED_HOSTS = ['django-deploy-tutorial-318015.an.r.appspot.com']
+    ALLOWED_HOSTS = ['*']
+else:
     # 開発環境
+    DEBUG = True
+    ALLOWED_HOSTS = ['*']
     with open(os.path.join(BASE_DIR, 'secrets', 'secret_dev.yaml')) as file:
         objs = yaml.safe_load(file)
         for obj in objs:
             os.environ[obj] = objs[obj]
-else:
-    # 本番環境
-    pass
+
 
 # Application definition
 
@@ -89,13 +91,36 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('GAE_APPLICATION', None):
+    # 本番環境
+    pass
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USERNAME'],
+            'PASSWORD': os.environ['DB_USERPASS'],
+            'HOST': '/cloudsql/{}'.format(os.environ['DB_CONNECTION'])
+        }
     }
-}
+else:
+    # 開発環境
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USERNAME'],
+            'PASSWORD': os.environ['DB_USERPASS'],
+            'HOST': '127.0.0.1',
+            'PORT': '3306'
+        }
+    }
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

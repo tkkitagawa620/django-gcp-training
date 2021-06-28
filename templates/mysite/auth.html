@@ -31,7 +31,11 @@
             <input type="password" id="id_password" name="password" class="form-control" placeholder="Password" required="required">
           </div>
 
-          <button class="btn btn-primary btn-block my-3" type="submit">サインイン</button>
+          {% if 'login' in request.path %}
+            <button class="btn btn-primary btn-block my-3" type="submit">サインイン</button>
+          {% elif 'signup' in request.path %}
+            <button class="btn btn-primary btn-block my-3" type="submit">新規登録</button>
+          {% endif %}
 
           {% if 'login' in request.path %}
             <div class="text-center">
@@ -39,7 +43,7 @@
             </div>
           {% elif 'signup' in request.path %}
             <div class="text-center">
-              <a href="/signup">ログインする</a>
+              <a href="/login">ログインする</a>
             </div>
           {% endif %}
         </form>
