@@ -24,7 +24,6 @@ class Login(LoginView):
 
     def form_valid(self, form):
         messages.success(self.request, 'ログインに成功しました')
-        return redirect('/')
         return super().form_valid(form)
 
     def form_invalid(self, form):
