@@ -8,8 +8,11 @@
         <h3 class="pb-4 mb-4 font-italic border-bottom">
           マイページ
         </h3>
-        <form class="row g-3" method="POST">
+        <form class="row g-3" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
+
+          <input type="file" accept="image/*" name="image" id="id_image">
+
           <div class="col-12">
             <label class="form-label">ユーザー名（公開されます）</label>
             <input type="text" class="form-control" id="id_username" name="username" placeholder="煉獄 杏寿郎" value="{{ user.profile.username }}">

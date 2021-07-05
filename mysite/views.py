@@ -52,7 +52,7 @@ def mypage(request):
         "user": user
     }
     if request.method == 'POST':
-        form = ProfileForm(request.POST)
+        form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = request.user
@@ -62,8 +62,15 @@ def mypage(request):
 
 
 def contact(request):
-    context = {}
+    context = {
+        'grecaptcha_siteky': os.environ['GRECAPTCHA_SITEKEY']
+    }
     if request.method == 'POST':
+        recaptcha_token = request.POST.get('g-recaptcha-response')
+        res = grecaptcha_request(recaptcha_token)
+        if not res:
+            messages.success(request, '人間の認証に失敗しました。')
+            return render(request, 'mysite/contact.html', context)
         # --- notify me
         subject = 'お問い合わせがありました。'
         message = """お問い合わせがありました\n\n名前：{}\nメールアドレス：{}\n内容：{}""".format(
@@ -77,3 +84,29 @@ def contact(request):
         messages.success(request, 'お問い合わせいただきありがとうございます。')
         # --- notify me
     return render(request, 'mysite/contact.html', context)
+
+
+def grecaptcha_request(token):
+    from urllib import request, parse
+    import json
+    import ssl
+
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+
+    url = "https://www.google.com/recaptcha/api/siteverify"
+    headers = {
+        'content-type': 'application/x-www-form-urlencoded'
+    }
+    data = {
+        'secret': os.environ['GRECAPTCHA_SECRETKEY'],
+        'response': token
+    }
+    data = parse.urlencode(data).encode()
+    req = request.Request(url, method="POST", headers=headers, data=data)
+    f = request.urlopen(req, context=context)
+    response = json.loads(f.read())
+    f.close()
+    print('---response---')
+    print(response)
+    print('---response---')
+    return response['success']

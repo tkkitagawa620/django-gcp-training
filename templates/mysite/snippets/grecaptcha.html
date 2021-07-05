@@ -1,0 +1,10 @@
+<script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"></script>
+<div class="g-recaptcha" data-sitekey="{{ grecaptcha_siteky }}" data-callback="verifyCallback"></div>
+<script>
+  function verifyCallback(response) {
+    console.log(response)
+    document
+      .getElementById('submit')
+      .disabled = false
+  }
+</script>

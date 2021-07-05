@@ -30,5 +30,6 @@ class ProfileForm(forms.ModelForm):
             'prefecture',
             'city',
             'address',
-            'zip_code'
+            'zip_code',
+            'image'
         )

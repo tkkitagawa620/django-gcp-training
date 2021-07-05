@@ -1,3 +1,6 @@
+# 静的ファイルを一元化する
+python manage.py collectstatic
+
 # GAEへアプリケーションをデプロイ
 gcloud app deploy --project django-deploy-tutorial-318015
 
